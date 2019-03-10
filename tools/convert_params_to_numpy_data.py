@@ -28,8 +28,10 @@ def process_dataset (zip_file_input, pkl_output, expected_param_length = 6162):
     print(dataset_dimensions)
     non_corrupt_elements = [ value for value in dataset.values() if len(value) == expected_param_length ]
     corrupt_elements     = [ value for value in dataset.values() if len(value) != expected_param_length ]
+    keys = [ key for key in dataset.keys() if len(dataset[key]) == expected_param_length ]
     print("have %s corrupt elements with sizes %s"%(len(corrupt_elements), set(map(len, corrupt_elements))))
     print("have %s non-corrupt elements; using those as our dataset"%(len(non_corrupt_elements)))
+    print("have %s keys"%(len(keys)))
     data = np.array(non_corrupt_elements)
     print("dataset shape: %s"%(data.shape,))
     
@@ -40,7 +42,7 @@ def process_dataset (zip_file_input, pkl_output, expected_param_length = 6162):
     with open(pkl_output, 'wb') as f:
         pkl.dump({
             'data': data,
-            'keys': list(dataset.keys())
+            'keys': keys
         }, f)
     
 process_dataset('../output-lv5/output.zip', '../datasets/training-lv5.pkl', 6162)
